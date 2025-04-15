@@ -1,31 +1,30 @@
-import { Field, Form, Formik } from "formik";
-import toast from "react-hot-toast";
-const SearchBar = ({ onSubmit }) => {
-  const handleSubmit = (values, actions) => {
-    const query = values.query.trim();
-    if (query === "") {
-      toast.error("Please enter a search term.");
-      return;
-    }
-    onSubmit(query);
-    actions.resetForm();
-  };
+import css from "./SearchBar.module.css";
+import { Formik, Form, Field } from "formik";
+
+export default function SearchBar({ onSubmit }) {
   return (
-    <header>
-      <Formik initialValues={{ query: "" }} onSubmit={handleSubmit}>
-        <Form>
+    <header className={css.header}>
+      <Formik
+        initialValues={{ query: "" }}
+        onSubmit={(values, actions) => {
+          onSubmit(values.query);
+          actions.resetForm();
+        }}
+      >
+        <Form className={css.form}>
           <Field
+            className={css.input}
             type="text"
             name="query"
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
           />
-          <button type="submit">Search</button>
+          <button type="submit" className={css.button}>
+            Search
+          </button>
         </Form>
       </Formik>
     </header>
   );
-};
-
-export default SearchBar;
+}
