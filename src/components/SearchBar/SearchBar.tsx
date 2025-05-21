@@ -1,16 +1,26 @@
 import css from "./SearchBar.module.css";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikHelpers } from "formik";
 
-export default function SearchBar({ onSubmit }) {
+type SearchBarProps = {
+  onSubmit: (query: string) => void;
+};
+
+type FormValues = {
+  query: string;
+};
+
+export default function SearchBar({ onSubmit }: SearchBarProps) {
+  const handleSubmit = (
+    values: FormValues,
+    actions: FormikHelpers<FormValues>
+  ) => {
+    onSubmit(values.query.trim());
+    actions.resetForm();
+  };
+
   return (
     <header className={css.header}>
-      <Formik
-        initialValues={{ query: "" }}
-        onSubmit={(values, actions) => {
-          onSubmit(values.query);
-          actions.resetForm();
-        }}
-      >
+      <Formik initialValues={{ query: "" }} onSubmit={handleSubmit}>
         <Form className={css.form}>
           <Field
             className={css.input}
